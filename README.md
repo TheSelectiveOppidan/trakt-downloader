@@ -1,4 +1,4 @@
-# trakt-puller
+# Trakt Puller - Download your watchlist instantly!
 This repository contains the code for the script to check and download movies off of a users watchlist.
 
 Features:
