@@ -2,7 +2,8 @@
 This repository contains the code for the script to check and download movies off of a users watchlist.
 
 Features:
-    - Login to Trakt using their OAuth flow.
+    - Login to Trakt using their OAuth flow
+    
     - Connect to multiple trakt accounts to pull from different users watchlists.
     - Check the watchlist of all users, find high quality torrents for the movies in their watchlist and initialise a download via a deluge server.
     - Keep track of active downloads in the deluge server. Download control to make sure a movie isn't downloaded twice.
