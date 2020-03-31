@@ -1,0 +1,8 @@
+{
+    "deluge_ip": "127.0.0.1",
+    "deluge_port": "58846",
+    "deluge_username": "localclient",
+    "deluge_password": "deluge",
+    "check_every_x_seconds": 5,
+    "check_trakt_every_x_seconds": 60
+}

@@ -1,0 +1,6 @@
+.idea/
+trakt_downloader.egg-info/
+dist/
+*.pyc
+
+trakt_downloader/old_config.json
