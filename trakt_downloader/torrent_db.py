@@ -112,6 +112,23 @@ def add_user(access_token, refresh_token, expires):
     except:
         pass
 
+def remove_user(user):
+    try:
+        found_user = session.query(TraktUser).filter_by(id=user.id).one()
+        session.delete(found_user)
+        session.commit()
+    except Exception as e:
+        print(e)
+        pass
+
+def update_user(user):
+    remove_user(user)
+    try:
+        session.add(user)
+        session.commit()
+    except Exception as e:
+        print(e)
+        pass
 
 def get_all_users():
     session = scoped_session(sessionmaker(bind=engine))

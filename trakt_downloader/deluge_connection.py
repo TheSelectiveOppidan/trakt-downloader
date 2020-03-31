@@ -1,5 +1,6 @@
 from trakt_downloader import torrent_db
 import os
+import time
 
 def check_progress(client):
     check = client.call("core.get_torrents_status", {}, [])
@@ -36,17 +37,38 @@ def check_progress(client):
 
                 try:
                     if (filename.endswith('.mp4')):
-                        print("rename mp4 file " + str(filename))
                         os.rename(destination + "/" + filename, destination_folder + "/" + torr.name + ".mp4")
+                        print("rename mp4 file " + str(filename))
                     elif (filename.endswith('.mkv')):
-                        print("rename mkv file " + str(filename))
                         os.rename(destination + "/" + filename, destination_folder + "/" + torr.name + ".mkv")
+                        print("rename mkv file " + str(filename))
+                    elif (filename.endswith('.srt')):
+                        print("leaving subtitle file " + str(filename))
                     else:
-                        print("delete file " + str(filename))
                         os.remove(destination + "/" + filename)
-                except:
+                        print("delete file " + str(filename))
+                except Exception as e:
+                    print("Unable to modify results. Is this script running on the same system as the deluge server?")
+                    print(e)
                     pass
 
             os.renames(destination_folder, destination + "/" + torr.name)
-        except:
+        except Exception as e:
+            print("Unable to rename directory. Is this script running on the same system as the deluge server?")
+            print(e)
             pass
+
+def add_torrent_magnet(client, torrent):
+    id = client.call('core.add_torrent_magnet', torrent.magnet_link, [])
+    if (id is None):
+        # print("Already have " + str(torrent.name))
+        id = str(time.time())
+        torrent_db.add_to_db(id, torrent)
+        torrent_db.set_finished(id, 1)
+        return
+
+    id = id.decode()
+
+    if (id != "None"):
+        torrent_db.add_to_db(id, torrent)
+        # torrent_db.set_finished(id, True)

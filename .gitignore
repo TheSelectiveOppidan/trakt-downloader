@@ -4,3 +4,7 @@ dist/
 *.pyc
 
 trakt_downloader/old_config.json
+
+trakt_downloader/trakt_credentials.json
+
+trakt_downloader/my-credentials.txt

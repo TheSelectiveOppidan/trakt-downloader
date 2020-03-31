@@ -8,6 +8,8 @@ from datetime import datetime
 ##NEED TO INSTALL
 ## pip install deluge-client
 ## pip install sqlalchemy
+from trakt_downloader.scraper import pull_movies
+from trakt_downloader.trakt_connection import do_authorize_loop
 
 client = None
 
@@ -33,7 +35,7 @@ def start():
         option = input("Do you want to add a new account? (y/n)")
 
         if option == 'y':
-            if not scraper.do_authorize_loop():
+            if not do_authorize_loop():
                 option = ''
 
     deluge_server_ip = live_config['deluge_ip']
@@ -67,7 +69,7 @@ def do_deluge_stuff():
             try:
                 if current_trakt_pull_time >= trakt_pull_time:
                     current_trakt_pull_time = 0
-                    trakt_connection.pull_movies(client)
+                    pull_movies(client)
 
                 print("Check at " + str(datetime.now().strftime("%m/%d/%Y, %H:%M:%S")) + " with " + str(
                     len(torrent_db.get_all_active())) + " active")
