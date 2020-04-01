@@ -1,6 +1,7 @@
 .idea/
 trakt_downloader.egg-info/
 dist/
+build/
 *.pyc
 
 trakt_downloader/old_config.json
@@ -8,3 +9,7 @@ trakt_downloader/old_config.json
 trakt_downloader/trakt_credentials.json
 
 trakt_downloader/my-credentials.txt
+
+trakt_downloader/trakt_credentials.py
+
+trakt_downloader/torrenter.db

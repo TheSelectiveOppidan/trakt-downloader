@@ -1,4 +1,4 @@
-from trakt_downloader import scraper, torrent_db
+from trakt_downloader import scraper, torrent_db, trakt_credentials
 import time
 import json
 import requests
@@ -14,13 +14,13 @@ from trakt_downloader.torrent_db import *
 
 from trakt_downloader.deluge_connection import add_torrent_magnet
 
-client_id = ""
-client_secret = ""
+client_id = trakt_credentials.client_id
+client_secret = trakt_credentials.client_secret
 
-with open(cwd + "/trakt_credentials.json", 'r') as myfile:
-    the_json = json.loads(myfile.read())
-    client_id = the_json['client_id']
-    client_secret = the_json['client_secret']
+# with open(cwd + "/trakt_credentials.json", 'r') as myfile:
+#     the_json = json.loads(myfile.read())
+#     client_id = the_json['client_id']
+#     client_secret = the_json['client_secret']
 
 def trakt_id_from_obj(o):
     return o.trakt_id
