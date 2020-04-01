@@ -23,6 +23,9 @@ live_config = None
 def start():
     global client, deluge_password, deluge_server_ip, deluge_server_port, deluge_username, live_config
 
+    print("Welcome to TraktPuller v0.2")
+    print("Source code available at https://github.com/TheSelectiveOppidan/trakt-downloader")
+
     if not configuration.check():
         print("Please fill in the configuration file I just created then rerun me.")
         exit()
