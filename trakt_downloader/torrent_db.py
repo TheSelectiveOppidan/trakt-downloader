@@ -85,7 +85,6 @@ Base.metadata.create_all(engine)
 Base.metadata.bind = engine
 session = scoped_session(sessionmaker(bind=engine))
 
-
 def get_config_item(key):
     session = scoped_session(sessionmaker(bind=engine))
     return session.query(Configuration).filter_by(key=key).all()
