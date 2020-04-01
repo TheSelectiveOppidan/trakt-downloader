@@ -35,7 +35,8 @@ default_config['check_trakt_every_x_seconds'] = 60
 #
 # returns Boolean - True if config already exists, False if not
 ########################
-def check():
+def check(start_dir = cwd):
+    config_file_path = start_dir + "/config.json"
     torrent_db.set_config_item("install_id", str(uuid.uuid4()))
     torrent_db.set_config_item("install_date", str(time.time()))
 
@@ -53,6 +54,7 @@ def check():
 #
 # returns Dictionary containing the configuration file contents
 ######################
-def get_config():
+def get_config(start_dir = cwd):
+    config_file_path = start_dir + "/config.json"
     with open(config_file_path) as config_file:
         return json.load(config_file)

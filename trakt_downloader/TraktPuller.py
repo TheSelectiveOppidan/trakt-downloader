@@ -4,6 +4,7 @@ from trakt_downloader import configuration, scraper, torrent_db, deluge_connecti
 
 import time
 from datetime import datetime
+import os
 
 ##NEED TO INSTALL
 ## pip install deluge-client
@@ -20,17 +21,17 @@ deluge_password = None
 
 live_config = None
 
-def start():
+def start(calling_dir = os.getcwd()):
     global client, deluge_password, deluge_server_ip, deluge_server_port, deluge_username, live_config
 
     print("Welcome to TraktPuller v0.2")
     print("Source code available at https://github.com/TheSelectiveOppidan/trakt-downloader")
 
-    if not configuration.check():
+    if not configuration.check(calling_dir):
         print("Please fill in the configuration file I just created then rerun me.")
         exit()
 
-    live_config = configuration.get_config()
+    live_config = configuration.get_config(calling_dir)
 
     option = ""
 

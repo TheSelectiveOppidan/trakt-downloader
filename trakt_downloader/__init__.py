@@ -1,3 +1,3 @@
-from trakt_downloader import TraktPuller
+from trakt_downloader import trakt_pull
 
-TraktPuller.start()
+trakt_pull.go()

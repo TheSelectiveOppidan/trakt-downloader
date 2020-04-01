@@ -8,8 +8,12 @@ setup(name='trakt_downloader',
       author_email='theselectiveoppidan@gmail.com',
       license='MIT',
       packages=['trakt_downloader'],
+      entry_points={
+            'console_scripts': ['trakt-pull=trakt_downloader.trakt_pull:go']
+      },
       install_requires=[
           'sqlalchemy',
           'deluge-client'
       ],
-      zip_safe=False)
+      zip_safe=False,
+      python_requires='>=3.6')
