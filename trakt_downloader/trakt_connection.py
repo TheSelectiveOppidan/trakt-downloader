@@ -14,6 +14,10 @@ from trakt_downloader.torrent_db import *
 
 from trakt_downloader.deluge_connection import add_torrent_magnet
 
+
+##NOTE FOR DEVELOPMENT
+##CREATE A FILE CALLED trakt_credentials.py which just has the 2 variables we access here as Strings.
+##Have fun
 client_id = trakt_credentials.client_id
 client_secret = trakt_credentials.client_secret
 
