@@ -1,6 +1,6 @@
 from deluge_client import DelugeRPCClient
 
-from trakt_downloader import configuration, scraper, torrent_db, deluge_connection, trakt_connection
+from trakt_downloader import configuration, popcorn_interface, torrent_db, deluge_connection, trakt_connection
 
 import time
 from datetime import datetime
@@ -9,7 +9,7 @@ import os
 ##NEED TO INSTALL
 ## pip install deluge-client
 ## pip install sqlalchemy
-from trakt_downloader.scraper import pull_movies
+from trakt_downloader.popcorn_interface import pull_movies
 from trakt_downloader.trakt_connection import do_authorize_loop
 
 client = None
@@ -21,8 +21,10 @@ deluge_password = None
 
 live_config = None
 
+CONNECT_TO_DELUGE = True
+
 def start(calling_dir = os.getcwd()):
-    global client, deluge_password, deluge_server_ip, deluge_server_port, deluge_username, live_config
+    global client, deluge_password, deluge_server_ip, deluge_server_port, deluge_username, live_config, CONNECT_TO_DELUGE
 
     print("Welcome to TraktPuller v0.4")
     print("Source code available at https://github.com/TheSelectiveOppidan/trakt-downloader")
@@ -49,19 +51,20 @@ def start(calling_dir = os.getcwd()):
 
     client = DelugeRPCClient(deluge_server_ip, deluge_server_port, deluge_username, deluge_password)
 
-    try:
-        client.connect()
-    except Exception as e:
-        print(e)
+    if CONNECT_TO_DELUGE:
+        try:
+            client.connect()
+        except Exception as e:
+            print(e)
 
     print("is Connected to Deluge: " + str(client.connected))
 
-    do_deluge_stuff()
+    main_loop()
 
-def do_deluge_stuff():
-    global client, live_config
+def main_loop():
+    global client, live_config, CONNECT_TO_DELUGE
 
-    if not client.connected:
+    if not client.connected and CONNECT_TO_DELUGE: ##Only show the error if its not connected to Deluge but it SHOULD be
         print("Can't connect to the deluge server at " + str(deluge_server_ip) + ":" + str(
             deluge_server_port) + " with credentials (" + str(deluge_username) + "->" + str(deluge_password) + ")")
     else:
@@ -73,12 +76,13 @@ def do_deluge_stuff():
             try:
                 if current_trakt_pull_time >= trakt_pull_time:
                     current_trakt_pull_time = 0
-                    pull_movies(client)
+                    pull_movies(client, CONNECT_TO_DELUGE)
 
                 print("Check at " + str(datetime.now().strftime("%m/%d/%Y, %H:%M:%S")) + " with " + str(
                     len(torrent_db.get_all_active())) + " active")
 
-                deluge_connection.check_progress(client)
+                if CONNECT_TO_DELUGE:
+                    deluge_connection.check_progress(client)
             except Exception as e:
                 print(e)
                 pass

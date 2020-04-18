@@ -1,11 +1,11 @@
-from trakt_downloader import scraper, torrent_db, trakt_credentials
+from trakt_downloader import popcorn_interface, torrent_db, trakt_credentials
 import time
 import json
 import requests
 import os
 from datetime import timedelta
 
-from trakt_downloader.scraper import get_torrent_link_for, TorrentToDownload
+from trakt_downloader.popcorn_interface import get_torrent_link_for, TorrentToDownload
 
 cwd = os.getcwd()
 
