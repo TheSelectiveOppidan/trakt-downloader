@@ -38,6 +38,7 @@ def obtain_list_of_torrents_to_check():
 
     for user in users:
         watchlist_for_this_guy = get_watchlist_for(user)
+        watchlist_for_this_guy.extend(get_wantlist_for(user))
 
         for movie in watchlist_for_this_guy:
             movie_name = movie['movie']['title']
@@ -97,6 +98,11 @@ def make_refresh_request(user):
     except:
         print("Something went wrong making a refresh attempt.")
 
+
+def do_refresh_for(user):
+    print("Refreshing access with " + str(user.refresh_token))
+    make_refresh_request(user)
+
 def get_watchlist_for(user):
     try:
         response = requests.get('https://api.trakt.tv/users/me/watchlist/movies',
@@ -104,8 +110,7 @@ def get_watchlist_for(user):
                                                      'Authorization': 'Bearer ' + str(user.access_token)})
 
         if response.status_code == 401:
-            print("Refreshing access with " + str(user.refresh_token))
-            make_refresh_request(user)
+            do_refresh_for(user)
             return []
         else:
             watchlist = json.loads(response.text)
@@ -113,6 +118,42 @@ def get_watchlist_for(user):
     except:
         print("Failed to get watchlist for user with token " + str(user.access_token))
         return []
+
+
+def get_wantlist_for(user):
+    try:
+        lists_response = requests.get("https://api.trakt.tv/users/me/lists",
+                                headers={'trakt-api-key': client_id,
+                                         'Authorization': 'Bearer ' + str(user.access_token)})
+
+        if lists_response.status_code == 401:
+            do_refresh_for(user)
+        else:
+            lists = lists_response.text
+            wantlist = next((x for x in lists if str(x['name']).lower() == "wantlist"), None)
+
+            if wantlist != None:
+                if wantlist['items'] > 0:
+                    wantlist_id = wantlist['ids']['trakt']
+                    list_items_response = requests.get("https://api.trakt.tv/users/me/lists/" + str(wantlist_id) + "/items/movies",
+                                                       headers={'trakt-api-key': client_id,
+                                                                'Authorization': 'Bearer ' + str(user.access_token)})
+
+                    if list_items_response.status_code == 401:
+                        do_refresh_for(user)
+                    else:
+                        items = list_items_response.text
+
+                        items_to_return = []
+
+                        for item in items:
+                            items_to_return.append(item)
+
+        return []
+    except:
+        print("Failed to get wantlist for user with token " + str(user.access_token))
+        return []
+
 
 def do_authorize_loop():
     try:
