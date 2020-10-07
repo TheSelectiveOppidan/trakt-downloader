@@ -142,9 +142,18 @@ def set_finished(change_id, finished):
     session.commit()
 
 
+def get_all():
+    session = scoped_session(sessionmaker(bind=engine))
+    return session.query(TorrentDownload).all()
+
 def get_all_active():
     session = scoped_session(sessionmaker(bind=engine))
     return session.query(TorrentDownload).filter_by(has_finished=0).all()
+
+
+def get_all_complete():
+    session = scoped_session(sessionmaker(bind=engine))
+    return session.query(TorrentDownload).filter_by(has_finished=1).all()
 
 
 def film_already_added(trakt_id):

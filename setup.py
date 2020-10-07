@@ -1,7 +1,8 @@
 from setuptools import setup
 
+##TODO: UPDATE VERSION ON BUILD
 setup(name='trakt_downloader',
-      version='0.5',
+      version='0.7',
       description="Ever remember a film and want to watch it right away? Well that used to be difficult. Until now.",
       url='https://github.com/TheSelectiveOppidan/trakt-downloader',
       author='The Selective Oppidan',

@@ -21,12 +21,14 @@ deluge_password = None
 
 live_config = None
 
+##TODO: CHANGE TO TRUE FOR BUILD
 CONNECT_TO_DELUGE = True
 
 def start(calling_dir = os.getcwd()):
     global client, deluge_password, deluge_server_ip, deluge_server_port, deluge_username, live_config, CONNECT_TO_DELUGE
 
-    print("Welcome to TraktPuller v0.5")
+    ##TODO: UPDATE VERSION ON BUILD
+    print("Welcome to TraktPuller v0.7")
     print("Source code available at https://github.com/TheSelectiveOppidan/trakt-downloader")
 
     if not configuration.check(calling_dir):
@@ -71,6 +73,13 @@ def main_loop():
         check_interval = max(live_config['check_every_x_seconds'], 5)
         trakt_pull_time = max(live_config['check_trakt_every_x_seconds'], 60)
         current_trakt_pull_time = trakt_pull_time
+
+        print("Updating local db from deluge...")
+        deluge_connection.update_local_db_to_match_deluge(client)
+
+        print("Pushing all downloaded to users collections...")
+        from trakt_downloader.trakt_connection import push_all_to_collection
+        push_all_to_collection()
 
         while True:
             try:

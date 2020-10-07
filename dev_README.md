@@ -21,5 +21,3 @@ Simple enough it's
 You'll be asked for username/password but then it should be done!
 
 Have fun!
-
-
