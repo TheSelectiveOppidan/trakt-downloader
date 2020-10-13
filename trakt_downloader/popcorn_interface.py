@@ -41,6 +41,32 @@ def get_torrent_link_for(imdb_id, name):
         print("Failed to find a torrent for " + str(name) + ' at ' + str(imdb_id))
         return ""
 
+def get_show_info(imdb_id):
+    global movies_url, shows_url
+    try:
+        popcorn_post = json.loads(requests.get(str(shows_url) + '/show/' + str(imdb_id)).text)
+
+        seasons = {}
+
+        for episode in popcorn_post['episodes']:
+            if episode['season'] not in seasons.keys():
+                seasons[episode['season']] = {}
+
+            seasons[episode['season']][episode['episode']] = episode
+
+        print("found " + str(len(seasons.keys())) + " seasons")
+
+        for season in seasons.keys():
+            print("season " + str(season) + " has " + len(seasons[season]) + " episodes")
+
+
+
+    except Exception as e:
+        # print(e)
+        print("Failed to find a torrent for " + str(imdb_id) + ' at ' + str(imdb_id))
+        return ""
+
+
 def pull_movies(client, CONNECT_TO_DELUGE=True):
     print("FETCHING FROM TRAKT")
 
@@ -50,3 +76,6 @@ def pull_movies(client, CONNECT_TO_DELUGE=True):
     if CONNECT_TO_DELUGE:
         for torrent in list_of_torrents:
             add_torrent_magnet(client, torrent)
+
+
+get_show_info("tt2930604")
